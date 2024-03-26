@@ -1,14 +1,37 @@
 import React from 'react';
-import {View, StyleSheet , Text} from 'react-native';
+import { View, StyleSheet, Text, ScrollView } from 'react-native';
+import HeaderHome from '../components/HeaderHome';
+import HeaderHomeTitleBar from '../components/HeaderHomeTitleBar';
+import AvatarEdit from '../components/AvatarEdit';
+import PersonnalInfo from '../components/PersonnalInfo';
+import EmailNotifications from '../components/EmailNotifications';
+import { useState } from 'react';
+
+import { useRoute } from '@react-navigation/native';
 
 const ProfileScreen = () => {
-    return (
-        <View>
-            <Text>Profile</Text>
-        </View>
-    );
-}
+	const route = useRoute();
+	const screenName = route.name;
 
-const styles = StyleSheet.create({})
+	const [image, setImage] = useState(null);
+
+	return (
+		<ScrollView keyboardDismissMode="on-drag" style={styles.container}>
+			<HeaderHome image={image}/>
+			<HeaderHomeTitleBar headerTitle={screenName} />
+			<AvatarEdit image={image} setImage={setImage}/>
+			<PersonnalInfo />
+			<EmailNotifications />
+		</ScrollView>
+	);
+};
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: '#fff',
+		paddingBottom: 20,
+	},
+});
 
 export default ProfileScreen;

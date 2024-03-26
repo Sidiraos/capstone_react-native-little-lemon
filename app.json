@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "little_lemon_app",
-    "slug": "little_lemon_app",
+    "slug": "little-lemon-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
@@ -14,7 +14,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "usesNonExemptEncryption" : false
+      "usesNonExemptEncryption": false
     },
     "android": {
       "adaptiveIcon": {
@@ -28,8 +28,20 @@
         {
           "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "fef7bb84-85dd-4946-8e80-804cedd11e05"
+      }
+    },
+    "owner": "sidiraos"
   },
   "name": "little_lemon_app"
 }

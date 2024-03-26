@@ -1,28 +1,43 @@
 import { useState , useEffect } from 'react';
 import { StyleSheet, SafeAreaView, StatusBar } from 'react-native';
-import Onboarding from './screens/Onboarding.js';
 import { PaperProvider } from 'react-native-paper';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import SplashScreen from './screens/SplashScreen.js';
+import Onboarding from './screens/Onboarding.js';
 import HomeScreen from './screens/HomeScreen.js';
+import ProfileScreen from './screens/ProfileScreen.js';
+
 import { MyLoginContext } from './app/context/MyContexts.js';
 import { storeData , getData } from './app/context/asyncStorageData.js';
+
+import { Karla_800ExtraBold, Karla_500Medium , useFonts } from '@expo-google-fonts/karla';
+import { clearAsyncData } from './app/context/asyncStorageData.js';
+
 
 export default function App() {
 	const [isLoged, setIsLoged] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
+
+	// console.log(isLoged)
 	
 	useEffect(() => {
 		const fetchData =  async ()=>{
+			// await clearAsyncData();
+			console.log("we fetching data asyncStorage")
 			const data = await getData('isLoged');
-			console.log("fetching data asyncStorage")
 			if(!data){
+				console.log("data not found in asyncStorage , so we store initialState of isLogedValue : " , isLoged)
 				await storeData('isLoged' , isLoged);
 	
 			} else {
-				setIsLoged(Boolean(data));
+				console.log("data found in asyncStorage , so we set the new state of isLogedValue : " , data)
+				console.log( "boolean ",data === "true")
+				const bol = data === "true"
+				setIsLoged(bol);
+				console.log("now isLoged state is : " , isLoged)
 			}
 		}
 
@@ -38,15 +53,25 @@ export default function App() {
 
 	}, [])
 
-	useEffect(() => {
-		console.log("isLoged" , isLoged)
-		const storeIsLogedData = async () => {
-			await storeData('isLoged' , isLoged);
-		}
-		storeIsLogedData()
-	}, [isLoged])
+	// useEffect(() => {
+	// 	console.log("on the mounting app , isLoged state is" , isLoged)
+	// 	const storeIsLogedData = async () => {
+	// 		console.log("we store isLoged state in async if it's changed , so we have value is : " , isLoged)
+	// 		await storeData('isLoged' , isLoged);
+	// 	}
+	// 	storeIsLogedData()
+	// }, [isLoged])
 	
 	const Stack = createNativeStackNavigator();
+
+	let [fontsLoaded] = useFonts({
+		Karla_800ExtraBold,
+		Karla_500Medium
+	});
+
+	if (!fontsLoaded) {
+		return null;
+	}
 	
 	if(isLoading){
 		return <SplashScreen />
@@ -66,11 +91,21 @@ export default function App() {
 									options={{ headerShown: false }}
 								/>
 							) : (
-								<Stack.Screen
+								<>
+								{/* <Stack.Screen
 									name="Home"
 									component={HomeScreen}
 									options={{ headerShown: false }}
+								/> */}
+								<Stack.Screen
+									name="Personnal information"
+									component={ProfileScreen}
+									options={{
+										headerShown: false,
+									  }}
 								/>
+								
+								</>
 							)}
 						</Stack.Navigator>
 					</SafeAreaView>

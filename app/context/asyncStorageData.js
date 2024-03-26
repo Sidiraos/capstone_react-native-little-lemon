@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const storeData = async (key , value) => {
     try {
       await AsyncStorage.setItem(key, value.toString());
-      console.log("async Save successfully");
+      console.log("async Save successfully with the value" , value);
     } catch (e) {
       // saving error
       console.log("error saving data" , e);
@@ -29,3 +29,11 @@ export const storeData = async (key , value) => {
       console.log("error reading value" , e);
     }
   };
+
+  export const clearAsyncData = async () => {
+    await AsyncStorage.clear();
+  }
+
+  export const deleteData = async (key) => {
+    await AsyncStorage.removeItem(key);
+  }

@@ -13,7 +13,10 @@ import { validateEmail, validatePassword } from '../utils/validate';
 import { onLogin } from '../app/context/secureStore';
 import { useContext } from 'react';
 import { MyLoginContext } from '../app/context/MyContexts';
-const Form = ({ navigation }) => {
+
+import { storeData } from '../app/context/asyncStorageData';
+
+const LoginForm = ({ navigation }) => {
 	const [email, setEmail] = React.useState('');
 	const [password, setPassword] = React.useState('');
 	const [isDisabled, setIsDisabled] = React.useState(true);
@@ -44,14 +47,15 @@ const Form = ({ navigation }) => {
 		console.log('can login ? ', result);
 		if (result) {
 			setIsLoged(true);
-			console.log('isLogedState : ', isLoged);
+			// console.log('isLogedState : ', isLoged);
 			console.log('login success');
+			console.log("new isLogedValue is stored in asyncStorage")
+			await storeIsLogedData("isLoged" , "true");
 			setErrMsg('');
 			setEmail('');
 			setPassword('');
 			setIsDisabled(true);
 		} else {
-			setIsLoged(false);
 			console.log('failed to login , isLogedValue : ', isLoged);
 			setErrMsg(
 				'Email or password is incorrect , if you are not registered , please register first'
@@ -77,7 +81,7 @@ const Form = ({ navigation }) => {
 		console.log('onBlur , focus is', isFocused);
 	};
 
-	// console.log('focus now is ', isFocused);
+
 
 	return (
 		<KeyboardAvoidingView
@@ -199,4 +203,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default Form;
+export default LoginForm;
