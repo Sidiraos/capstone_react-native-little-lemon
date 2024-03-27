@@ -50,7 +50,7 @@ const LoginForm = ({ navigation }) => {
 			// console.log('isLogedState : ', isLoged);
 			console.log('login success');
 			console.log("new isLogedValue is stored in asyncStorage")
-			await storeIsLogedData("isLoged" , "true");
+			await storeData("isLoged" , "true");
 			setErrMsg('');
 			setEmail('');
 			setPassword('');
@@ -81,8 +81,7 @@ const LoginForm = ({ navigation }) => {
 		console.log('onBlur , focus is', isFocused);
 	};
 
-
-
+	
 	return (
 		<KeyboardAvoidingView
 			style={styles.container}

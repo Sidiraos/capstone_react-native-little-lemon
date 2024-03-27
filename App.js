@@ -1,4 +1,4 @@
-import { useState , useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, StatusBar } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
 import 'react-native-gesture-handler';
@@ -11,47 +11,60 @@ import HomeScreen from './screens/HomeScreen.js';
 import ProfileScreen from './screens/ProfileScreen.js';
 
 import { MyLoginContext } from './app/context/MyContexts.js';
-import { storeData , getData } from './app/context/asyncStorageData.js';
+import {
+	storeData,
+	getData,
+	clearAsyncData,
+} from './app/context/asyncStorageData.js';
 
-import { Karla_800ExtraBold, Karla_500Medium , useFonts } from '@expo-google-fonts/karla';
-import { clearAsyncData } from './app/context/asyncStorageData.js';
+import {
+	Karla_800ExtraBold,
+	Karla_500Medium,
+	useFonts,
+} from '@expo-google-fonts/karla';
 
+import { store } from './app/redux/store.js';
+import { Provider } from 'react-redux';
 
 export default function App() {
 	const [isLoged, setIsLoged] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 
 	// console.log(isLoged)
-	
+
 	useEffect(() => {
-		const fetchData =  async ()=>{
+		const fetchData = async () => {
 			// await clearAsyncData();
-			console.log("we fetching data asyncStorage")
+			console.log('we fetching data asyncStorage');
 			const data = await getData('isLoged');
-			if(!data){
-				console.log("data not found in asyncStorage , so we store initialState of isLogedValue : " , isLoged)
-				await storeData('isLoged' , isLoged);
-	
+			if (!data) {
+				console.log(
+					'data not found in asyncStorage , so we store initialState of isLogedValue : ',
+					isLoged
+				);
+				await storeData('isLoged', isLoged);
 			} else {
-				console.log("data found in asyncStorage , so we set the new state of isLogedValue : " , data)
-				console.log( "boolean ",data === "true")
-				const bol = data === "true"
+				console.log(
+					'data found in asyncStorage , so we set the new state of isLogedValue : ',
+					data
+				);
+				console.log('boolean ', data === 'true');
+				const bol = data === 'true';
 				setIsLoged(bol);
-				console.log("now isLoged state is : " , isLoged)
+				console.log('now isLoged state is : ', isLoged);
 			}
-		}
+		};
 
 		fetchData();
 
 		const intervalID = setTimeout(() => {
-			setIsLoading(false)
-		} , 1000)
+			setIsLoading(false);
+		}, 1000);
 
 		return () => {
-			clearTimeout(intervalID)
-		}
-
-	}, [])
+			clearTimeout(intervalID);
+		};
+	}, []);
 
 	// useEffect(() => {
 	// 	console.log("on the mounting app , isLoged state is" , isLoged)
@@ -61,57 +74,58 @@ export default function App() {
 	// 	}
 	// 	storeIsLogedData()
 	// }, [isLoged])
-	
+
 	const Stack = createNativeStackNavigator();
 
 	let [fontsLoaded] = useFonts({
 		Karla_800ExtraBold,
-		Karla_500Medium
+		Karla_500Medium,
 	});
 
 	if (!fontsLoaded) {
 		return null;
 	}
-	
-	if(isLoading){
-		return <SplashScreen />
+
+	if (isLoading) {
+		return <SplashScreen />;
 	}
 
 	return (
-		<MyLoginContext.Provider value={{ isLoged, setIsLoged }}>
-			<NavigationContainer>
-				<PaperProvider>
-					<StatusBar backgroundColor={'rgba(1, 1, 1, 0.8 )'} />
-					<SafeAreaView style={styles.container}>
-						<Stack.Navigator>
-							{!isLoged ? (
-								<Stack.Screen
-									name="OnBoarding"
-									component={Onboarding}
-									options={{ headerShown: false }}
-								/>
-							) : (
-								<>
-								{/* <Stack.Screen
+		<Provider store={store}>
+			<MyLoginContext.Provider value={{ isLoged, setIsLoged }}>
+				<NavigationContainer>
+					<PaperProvider>
+						<StatusBar backgroundColor={'rgba(1, 1, 1, 0.8 )'} />
+						<SafeAreaView style={styles.container}>
+							<Stack.Navigator>
+								{!isLoged ? (
+									<Stack.Screen
+										name="OnBoarding"
+										component={Onboarding}
+										options={{ headerShown: false }}
+									/>
+								) : (
+									<>
+										{/* <Stack.Screen
 									name="Home"
 									component={HomeScreen}
 									options={{ headerShown: false }}
 								/> */}
-								<Stack.Screen
-									name="Personnal information"
-									component={ProfileScreen}
-									options={{
-										headerShown: false,
-									  }}
-								/>
-								
-								</>
-							)}
-						</Stack.Navigator>
-					</SafeAreaView>
-				</PaperProvider>
-			</NavigationContainer>
-		</MyLoginContext.Provider>
+										<Stack.Screen
+											name="Personnal information"
+											component={ProfileScreen}
+											options={{
+												headerShown: false,
+											}}
+										/>
+									</>
+								)}
+							</Stack.Navigator>
+						</SafeAreaView>
+					</PaperProvider>
+				</NavigationContainer>
+			</MyLoginContext.Provider>
+		</Provider>
 	);
 }
 

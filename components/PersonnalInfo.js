@@ -66,4 +66,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default PersonnalInfo;
+export default React.memo(PersonnalInfo);

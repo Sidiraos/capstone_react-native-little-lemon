@@ -5,6 +5,8 @@ import HeaderHomeTitleBar from '../components/HeaderHomeTitleBar';
 import AvatarEdit from '../components/AvatarEdit';
 import PersonnalInfo from '../components/PersonnalInfo';
 import EmailNotifications from '../components/EmailNotifications';
+import LogOut from '../components/LogOut';
+
 import { useState } from 'react';
 
 import { useRoute } from '@react-navigation/native';
@@ -22,6 +24,7 @@ const ProfileScreen = () => {
 			<AvatarEdit image={image} setImage={setImage}/>
 			<PersonnalInfo />
 			<EmailNotifications />
+			<LogOut />
 		</ScrollView>
 	);
 };
@@ -34,4 +37,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default ProfileScreen;
+export default React.memo(ProfileScreen);

@@ -17,7 +17,9 @@ export const onLogin = async (emailLog , passwordLog) => {
     try {
         let formData = await SecureStore.getItemAsync('formData');
         let storedData = JSON.parse(formData);
-        let result = (storedData.email === emailLog && storedData.passwordLog === passwordLog);
+        // console.log(storedData)
+        // console.log(emailLog , passwordLog)
+        let result = (storedData.email === emailLog && storedData.password === passwordLog);
         return result
 
     } catch (err) {
