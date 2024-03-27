@@ -11,7 +11,7 @@ import { getFirstName } from '../app/context/secureStore';
 import { useEffect , useState} from 'react';
 import {useSelector} from 'react-redux'
 
-const HeaderHome = () => {
+const HeaderHome = ({noChanged}) => {
 	const [firstName , setFirstName] = useState('');
 	const image = useSelector(state => state.profilInfo.image)
 	console.log("header home")
@@ -27,7 +27,7 @@ const HeaderHome = () => {
 	
 	return (
 		<View style={styles.container}>
-			<BackButton />
+			<BackButton noChanged={noChanged} />
 			<Logo widthLogo={200} heightLogo={100} />
 			{!image ? (!firstName ? <Avatar.Image
 				size={40}

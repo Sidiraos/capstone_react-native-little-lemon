@@ -5,7 +5,7 @@ import { showAlert } from '../utils/alert';
 import { getObjectData , storeObjectData } from '../app/context/asyncStorageData';
 import {useSelector , shallowEqual , useDispatch} from 'react-redux';
 import { updateStateFromAsync } from '../app/redux/slices/profilInfoSlice';
-const SaveDiscard = () => {
+const SaveDiscard = ({noChanging , setNoChanged}) => {
 	console.log('saved discard component');
     const profilInfoState = useSelector(state => state.profilInfo , shallowEqual);
     const dispatch = useDispatch();
@@ -13,6 +13,7 @@ const SaveDiscard = () => {
 		Karla_500Medium,
 	});
 	if (!fontsLoaded) null;
+
 
 	const handleSave = () => {
 		console.log('handle save');
@@ -22,6 +23,7 @@ const SaveDiscard = () => {
                 await storeObjectData('profilInfo', profilInfoState);
                 Alert.alert('Changes Saved');
                 console.log("data saved")
+                setNoChanged(true);
                 
             } catch (error) {
                 console.log('error saving data', error.message);
@@ -63,19 +65,21 @@ const SaveDiscard = () => {
 	return (
 		<View style={styles.buttonGroup}>
 			<TouchableOpacity
-				style={[styles.button, styles.discardButton]}
+				style={[styles.button, noChanging ? styles.buttonDisabled : styles.discardButton]}
 				onPress={handleDiscard}
+                disabled={noChanging}
 			>
-				<Text style={[styles.textButton, styles.discardText]}>
+				<Text style={[styles.textButton, noChanging ? styles.buttonDisabledText : styles.discardText]}>
 					Discard changes
 				</Text>
 			</TouchableOpacity>
 
 			<TouchableOpacity
-				style={[styles.button, styles.saveButton]}
+				style={[styles.button, noChanging ? styles.buttonDisabled : styles.saveButton]}
 				onPress={handleSave}
+                disabled={noChanging}
 			>
-				<Text style={[styles.textButton, styles.saveText]}>
+				<Text style={[styles.textButton, noChanging ? styles.buttonDisabledText : styles.saveText]}>
 					Save changes
 				</Text>
 			</TouchableOpacity>
@@ -116,6 +120,13 @@ const styles = StyleSheet.create({
 	saveText: {
 		color: '#fff',
 	},
+    buttonDisabled : {
+        backgroundColor : '#F2F3F4',
+        borderColor : '#F2F3F4'
+    },
+    buttonDisabledText : {
+        color : 'rgba(51, 51, 51, 0.6)'
+    }
 });
 
 export default React.memo(SaveDiscard);

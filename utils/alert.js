@@ -1,6 +1,6 @@
 import { Alert } from 'react-native';
 
-export const showAlert = (alertTitle , alertMsg  , saveToStorage) =>
+export const showAlert = (alertTitle , alertMsg  , callBack) =>
   Alert.alert(
     alertTitle,
     alertMsg,
@@ -10,6 +10,6 @@ export const showAlert = (alertTitle , alertMsg  , saveToStorage) =>
         onPress: () => Alert.alert('canceled'),
         style: 'cancel',
       },
-      { text: 'OK', onPress: saveToStorage },
+      { text: 'OK', onPress: callBack },
     ],
   );

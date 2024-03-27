@@ -1,14 +1,27 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { BackIcon } from '../utils/Icons';
-import {useNavigation} from '@react-navigation/native';
-
-const BackButton = () => {
+import { useNavigation } from '@react-navigation/native';
+import { showAlert } from '../utils/alert';
+const BackButton = ({ noChanged }) => {
 	const navigation = useNavigation();
 	const handleBackButton = () => {
-		console.log("going back");
-		// navigation.navigate("Home");
-	}
+		const handleReturn = () => {
+			// navigation.navigate("Home");
+			console.log('going back');
+			
+		}
+		if (!noChanged) {
+			showAlert(
+				'Discard changes',
+				'unsaved changes will be lost if you return, are you sure?',
+				handleReturn
+			);
+		} else {
+			// navigation.navigate("Home");
+			console.log("going back")
+		}
+	};
 	return (
 		<TouchableOpacity style={styles.iconButton} onPress={handleBackButton}>
 			<BackIcon width={25} height={30} color={'#fff'} strokeWidth={15} />

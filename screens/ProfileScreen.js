@@ -8,11 +8,13 @@ import EmailNotifications from '../components/EmailNotifications';
 import LogOut from '../components/LogOut';
 import SaveDiscard from '../components/SaveDiscard';
 
-import { useEffect } from 'react';
+import { useEffect , useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import {useSelector , useDispatch , shallowEqual} from 'react-redux';
 import { storeObjectData , getObjectData } from '../app/context/asyncStorageData';
 import { updateStateFromAsync  } from '../app/redux/slices/profilInfoSlice';
+
+import _ from 'lodash';
 
 const ProfileScreen = () => {
 	const route = useRoute();
@@ -21,6 +23,27 @@ const ProfileScreen = () => {
 	const dispatch = useDispatch();
 	console.log("state changed on profilescreen ")
 	console.log("profil state after dispatch ", profilInfoState)
+
+	const [noChanged , setNoChanged] = useState(true);
+
+	useEffect(() => {
+		console.log("use effect is changing state");
+		const fetchingStorage = async ()=>{
+			console.log("fetching storage");
+			const profilInfo = await getObjectData('profilInfo');
+			if (profilInfo){
+				const isEqual = _.isEqual(profilInfoState , profilInfo);
+				if(!isEqual){
+					setNoChanged(false);
+				} else {
+					setNoChanged(true);
+				}
+			}
+		}
+		fetchingStorage();
+	} , [profilInfoState]);
+
+	console.log("no changed value is"  , noChanged)
 
 	useEffect(() => {
 		console.log("use effect on profile screen")
@@ -43,14 +66,14 @@ const ProfileScreen = () => {
 
 	return (
 		<>
-			<HeaderHome />
+			<HeaderHome noChanged = {noChanged} />
 			<ScrollView keyboardDismissMode="on-drag" style={styles.container}>
 				<HeaderHomeTitleBar headerTitle={screenName} />
 				<AvatarEdit />
 				<PersonnalInfo />
 				<EmailNotifications />
 				<LogOut />
-				<SaveDiscard />
+				<SaveDiscard noChanging = {noChanged} setNoChanged = {setNoChanged} />
 			</ScrollView>
 		</>
 	);
