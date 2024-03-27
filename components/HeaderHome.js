@@ -9,9 +9,12 @@ import BackButton from './BackButton';
 import UserAvatar from 'react-native-user-avatar';
 import { getFirstName } from '../app/context/secureStore';
 import { useEffect , useState} from 'react';
+import {useSelector} from 'react-redux'
 
-const HeaderHome = ({image}) => {
-	const [firstName , setFirstName] = useState('')
+const HeaderHome = () => {
+	const [firstName , setFirstName] = useState('');
+	const image = useSelector(state => state.profilInfo.image)
+	console.log("header home")
 	useEffect(() => {
 		const fetchFirstName = async () => {
 			const name = await getFirstName();
@@ -49,4 +52,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default HeaderHome;
+export default React.memo(HeaderHome);

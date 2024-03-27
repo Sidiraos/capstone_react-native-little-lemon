@@ -7,7 +7,13 @@ import { getFirstName } from '../app/context/secureStore';
 import UserAvatar from 'react-native-user-avatar';
 import * as ImagePicker from 'expo-image-picker';
 
-const AvatarEdit = ({image , setImage}) => {
+import {useSelector , useDispatch} from 'react-redux';
+import { changeImage, removeImage } from '../app/redux/slices/profilInfoSlice';
+
+const AvatarEdit = () => {
+	const image = useSelector(state => state.profilInfo.image);
+	const dispatch = useDispatch();
+	console.log("avatar edit")
 	const pickImage = async () => {
 		// No permissions request is necessary for launching the image library
 		let result = await ImagePicker.launchImageLibraryAsync({
@@ -20,7 +26,7 @@ const AvatarEdit = ({image , setImage}) => {
 		console.log(result);
 	
 		if (!result.canceled) {
-		  setImage(result.assets[0].uri);
+			dispatch(changeImage(result.assets[0].uri));
 		}
 	  };
 	
@@ -33,7 +39,7 @@ const AvatarEdit = ({image , setImage}) => {
 			return
 		}
 		console.log('removed');
-		setImage(null);
+		dispatch(removeImage());
 	};
 
     const [firstName , setFirstName] = useState('')
@@ -90,4 +96,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default AvatarEdit;
+export default React.memo(AvatarEdit);

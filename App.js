@@ -12,8 +12,8 @@ import ProfileScreen from './screens/ProfileScreen.js';
 
 import { MyLoginContext } from './app/context/MyContexts.js';
 import {
-	storeData,
-	getData,
+	storeObjectData,
+	getObjectData,
 	clearAsyncData,
 } from './app/context/asyncStorageData.js';
 
@@ -36,13 +36,13 @@ export default function App() {
 		const fetchData = async () => {
 			// await clearAsyncData();
 			console.log('we fetching data asyncStorage');
-			const data = await getData('isLoged');
+			const data = await getObjectData('isLoged');
 			if (!data) {
 				console.log(
 					'data not found in asyncStorage , so we store initialState of isLogedValue : ',
 					isLoged
 				);
-				await storeData('isLoged', isLoged);
+				await storeObjectData('isLoged', isLoged);
 			} else {
 				console.log(
 					'data found in asyncStorage , so we set the new state of isLogedValue : ',

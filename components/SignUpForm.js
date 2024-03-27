@@ -13,7 +13,7 @@ import { validateEmail, validatePassword } from '../utils/validate';
 import { onSignUp } from '../app/context/secureStore';
 import { useContext } from 'react';
 import { MyLoginContext } from '../app/context/MyContexts';
-import { storeData } from '../app/context/asyncStorageData';
+import { storeObjectData } from '../app/context/asyncStorageData';
 const SignUpForm = ({ navigation }) => {
 	const [formData, setFormData] = React.useState({
 		email: '',
@@ -43,7 +43,7 @@ const SignUpForm = ({ navigation }) => {
 		} else {
 			setIsDisabled(true);
 		}
-	}, [formData.email , formData.password , formData.confirmPassword]);
+	}, [formData.email, formData.password, formData.confirmPassword]);
 
 	const { isLoged, setIsLoged } = useContext(MyLoginContext);
 
@@ -63,7 +63,7 @@ const SignUpForm = ({ navigation }) => {
 			console.log('can signup', result);
 			// console.log('isLogedState : ', isLoged);
 			console.log('signup success');
-			await storeData('isLoged', 'true');
+			await storeObjectData('isLoged', 'true');
 			console.log('new isLogedValue is stored in asyncStorage');
 			setFormData({
 				email: '',

@@ -2,6 +2,7 @@ import React from 'react';
 import {View, StyleSheet , Text} from 'react-native';
 
 const HeaderHomeTitleBar = ({headerTitle}) => {
+    console.log("Header home title bar")
     return (
         <View style={[styles.container, styles.shadowProp]}>
             <Text style={styles.barText}>{headerTitle}</Text>
@@ -30,4 +31,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default HeaderHomeTitleBar;
+export default React.memo(HeaderHomeTitleBar);

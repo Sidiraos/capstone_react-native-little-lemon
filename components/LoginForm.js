@@ -14,7 +14,7 @@ import { onLogin } from '../app/context/secureStore';
 import { useContext } from 'react';
 import { MyLoginContext } from '../app/context/MyContexts';
 
-import { storeData } from '../app/context/asyncStorageData';
+import { storeObjectData } from '../app/context/asyncStorageData';
 
 const LoginForm = ({ navigation }) => {
 	const [email, setEmail] = React.useState('');
@@ -49,8 +49,8 @@ const LoginForm = ({ navigation }) => {
 			setIsLoged(true);
 			// console.log('isLogedState : ', isLoged);
 			console.log('login success');
-			console.log("new isLogedValue is stored in asyncStorage")
-			await storeData("isLoged" , "true");
+			console.log('new isLogedValue is stored in asyncStorage');
+			await storeObjectData('isLoged', 'true');
 			setErrMsg('');
 			setEmail('');
 			setPassword('');
@@ -81,7 +81,6 @@ const LoginForm = ({ navigation }) => {
 		console.log('onBlur , focus is', isFocused);
 	};
 
-	
 	return (
 		<KeyboardAvoidingView
 			style={styles.container}
