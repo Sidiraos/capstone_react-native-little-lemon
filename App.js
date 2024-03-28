@@ -66,15 +66,6 @@ export default function App() {
 		};
 	}, []);
 
-	// useEffect(() => {
-	// 	console.log("on the mounting app , isLoged state is" , isLoged)
-	// 	const storeIsLogedData = async () => {
-	// 		console.log("we store isLoged state in async if it's changed , so we have value is : " , isLoged)
-	// 		await storeData('isLoged' , isLoged);
-	// 	}
-	// 	storeIsLogedData()
-	// }, [isLoged])
-
 	const Stack = createNativeStackNavigator();
 
 	let [fontsLoaded] = useFonts({
@@ -106,11 +97,11 @@ export default function App() {
 									/>
 								) : (
 									<>
-										{/* <Stack.Screen
-									name="Home"
-									component={HomeScreen}
-									options={{ headerShown: false }}
-								/> */}
+										<Stack.Screen
+											name="Home"
+											component={HomeScreen}
+											options={{ headerShown: false }}
+										/>
 										<Stack.Screen
 											name="Personnal information"
 											component={ProfileScreen}

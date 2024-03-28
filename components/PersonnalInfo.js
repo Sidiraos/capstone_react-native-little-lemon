@@ -54,6 +54,7 @@ const PersonnalInfo = () => {
 						readOnly
 						
 					/>
+				
 		</View>
 	);
 };

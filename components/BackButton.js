@@ -3,12 +3,29 @@ import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { BackIcon } from '../utils/Icons';
 import { useNavigation } from '@react-navigation/native';
 import { showAlert } from '../utils/alert';
+import { getObjectData } from '../app/context/asyncStorageData';
+import { useDispatch } from 'react-redux';
+import { updateStateFromAsync } from '../app/redux/slices/profilInfoSlice';
 const BackButton = ({ noChanged }) => {
+
+	const dispatch = useDispatch();
 	const navigation = useNavigation();
 	const handleBackButton = () => {
-		const handleReturn = () => {
-			// navigation.navigate("Home");
-			console.log('going back');
+		const handleReturn = async () => {
+			try{
+				const profilInfo = await getObjectData('profilInfo');
+                if(profilInfo){
+					dispatch(updateStateFromAsync(profilInfo));
+                }
+                Alert.alert('Changes discarded');
+                console.log("changes no saved")
+				console.log('going back');
+				navigation.goBack();
+                
+            } catch (error) {
+                console.log('error', error.message);
+                Alert.alert('Error Discarding Changes' , error.message);
+            } 
 			
 		}
 		if (!noChanged) {
@@ -18,7 +35,7 @@ const BackButton = ({ noChanged }) => {
 				handleReturn
 			);
 		} else {
-			// navigation.navigate("Home");
+			navigation.goBack();
 			console.log("going back")
 		}
 	};

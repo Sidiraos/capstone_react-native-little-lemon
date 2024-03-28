@@ -1,11 +1,17 @@
 import React from 'react';
-import {View, StyleSheet , Text} from 'react-native';
-
-const HomeScreen = () => {
+import {View, StyleSheet , Text , ScrollView} from 'react-native';
+import HeaderHome from '../components/HeaderHome';
+import HomeHeroSection from '../components/HomeHeroSection';
+import useGetProfilInfo  from '../app/customHooks/useGetProfilInfo';
+const HomeScreen = ({navigation}) => {
+    useGetProfilInfo();
     return (
-        <View>
-            <Text>Home</Text>
-        </View>
+        <>
+        <HeaderHome navigation={navigation}/>
+        <ScrollView>
+            <HomeHeroSection />
+        </ScrollView>
+        </>
     );
 }
 

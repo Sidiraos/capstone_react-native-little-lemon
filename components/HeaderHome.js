@@ -1,41 +1,49 @@
 import React from 'react';
-import {
-	View,
-	StyleSheet,
-} from 'react-native';
+import { View, StyleSheet , Pressable } from 'react-native';
 import { Avatar } from 'react-native-paper';
 import Logo from './Logo';
-import BackButton from './BackButton';
 import UserAvatar from 'react-native-user-avatar';
 import { getFirstName } from '../app/context/secureStore';
-import { useEffect , useState} from 'react';
-import {useSelector} from 'react-redux'
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useRoute } from '@react-navigation/native';
 
-const HeaderHome = ({noChanged}) => {
-	const [firstName , setFirstName] = useState('');
-	const image = useSelector(state => state.profilInfo.image)
-	console.log("header home")
+
+const HeaderHome = ({ btnComponent , navigation }) => {
+	const [firstName, setFirstName] = useState('');
+	const image = useSelector((state) => state.profilInfo.image);
+	console.log('header home');
+	const route = useRoute();
+	const screenName = route.name;
 	useEffect(() => {
 		const fetchFirstName = async () => {
 			const name = await getFirstName();
-			if(name){
-				setFirstName(name)
+			if (name) {
+				setFirstName(name);
 			}
-		}
-		fetchFirstName()
-	} , [])
-	
+		};
+		fetchFirstName();
+	}, []);
+
 	return (
 		<View style={styles.container}>
-			<BackButton noChanged={noChanged} />
+			{btnComponent}
 			<Logo widthLogo={200} heightLogo={100} />
-			{!image ? (!firstName ? <Avatar.Image
-				size={40}
-				source={require('../assets/images/avatarIcon.png')}
-				backgroundColor="transparent"
-			/> : <UserAvatar size={40} name={firstName} />) : (
+			<Pressable onPress={() => screenName === 'Home' && navigation.navigate('Personnal information')}>
+			{!image ? (
+				!firstName ? (
+					<Avatar.Image
+						size={40}
+						source={require('../assets/images/avatarIcon.png')}
+						backgroundColor="transparent"
+					/>
+				) : (
+					<UserAvatar size={40} name={firstName} />
+				)
+			) : (
 				<Avatar.Image size={40} source={{ uri: image }} />
 			)}
+			</Pressable>
 		</View>
 	);
 };
