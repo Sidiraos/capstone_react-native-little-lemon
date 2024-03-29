@@ -17,7 +17,8 @@ const HomeHeroSection = () => {
 		MarkaziText_400Regular,
         Karla_500Medium
 	});
-	if (!fontsLoaded) {null};
+	if(!fontsLoaded) return null
+
 
 	return (
 		<View style={styles.container}>

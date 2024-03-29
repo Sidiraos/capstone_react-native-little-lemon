@@ -12,6 +12,10 @@ const SearchBar = () => {
 				onChangeText={setSearchQuery}
 				value={searchQuery}
                 theme={{ colors: { primary: '#F4CE14'  , elevation: {level3 : '#F2F3F4'}} }}
+                mode='view'
+                elevation={4}
+                style={styles.boxStyle}
+                inputStyle={styles.inputStyle}
 			/>
 		</View>
 	);
@@ -19,17 +23,19 @@ const SearchBar = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         marginTop: 20,
-        marginHorizontal: 10,
+        marginVertical: 10,
+        flex: 1,
     },
-    shadowProp: {
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowOpacity: 0.29,  }
+    boxStyle: {
+        height: 40,
+        justifyContent: 'center',
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    inputStyle: {
+        alignSelf: 'center',
+    }
 });
 
 export default SearchBar;
