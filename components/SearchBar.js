@@ -6,7 +6,6 @@ const SearchBar = () => {
 	const [searchQuery, setSearchQuery] = React.useState('');
 
 	return (
-		<View style={styles.container}>
 			<Searchbar
 				placeholder="Search"
 				onChangeText={setSearchQuery}
@@ -17,16 +16,10 @@ const SearchBar = () => {
                 style={styles.boxStyle}
                 inputStyle={styles.inputStyle}
 			/>
-		</View>
 	);
 };
 
 const styles = StyleSheet.create({
-    container: {
-        marginTop: 20,
-        marginVertical: 10,
-        flex: 1,
-    },
     boxStyle: {
         height: 40,
         justifyContent: 'center',

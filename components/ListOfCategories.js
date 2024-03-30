@@ -53,7 +53,7 @@ const ListOfCategories = () => {
 
 const styles = StyleSheet.create({
 	itemButton: {
-		// backgroundColor: '#D9D9D9',
+		flex : 1,
 		padding: 10,
 		marginVertical: 8,
 		marginRight: 10,
@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
 	},
     container : {
 		flex : 1,
+
     }
 });
 

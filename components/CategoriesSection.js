@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, StyleSheet} from 'react-native';
 import { Karla_800ExtraBold , useFonts } from '@expo-google-fonts/karla';
 import CategoriesSectionTitle from './CategoriesSectionTitle';
 import ListOfCategories from './ListOfCategories';
+import FoodMenu from './FoodMenu';
 const CategoriesSection = () => {
     const [fontsLoaded] = useFonts({
         Karla_800ExtraBold
@@ -24,8 +25,9 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
         backgroundColor: '#fff',
-        borderBottomWidth: 1,
-        borderBottomColor: 'rgba(51, 51, 51, 0.6)',
+        borderBottomWidth : 1,
+		borderBottomColor : 'rgba(51, 51, 51, 0.3)',
+		borderStyle : 'dashed',
     }
 });
 

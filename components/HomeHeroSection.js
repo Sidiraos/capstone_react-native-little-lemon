@@ -1,72 +1,75 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
 import {
 	MarkaziText_500Medium,
 	MarkaziText_400Regular,
-	useFonts,
 } from '@expo-google-fonts/markazi-text';
 import { Karla_500Medium } from '@expo-google-fonts/karla';
 
+import { useFonts } from 'expo-font';
+
+
 import SearchBar from './SearchBar';
-
-
 
 const HomeHeroSection = () => {
 	const [fontsLoaded] = useFonts({
 		MarkaziText_500Medium,
 		MarkaziText_400Regular,
-        Karla_500Medium
+		Karla_500Medium,
 	});
-	if(!fontsLoaded) return null
-
+	if (!fontsLoaded) return null;
 
 	return (
 		<View style={styles.container}>
-			<View>
+			{/* box 1 */}
+			<View style={{ flex: 0.4 }}>
 				<Text style={styles.displayText}>Little lemon</Text>
 				<Text style={styles.subTitle}>Chicago</Text>
 			</View>
-			<View style={styles.innerContainer}>
+			{/* box 2 */}
+			<View style={[styles.innerContainer, { flex: 0.4 }]}>
 				<View style={styles.subContainerText}>
 					<Text style={styles.leadText}>
 						We are a family owned Mediterranean restaurant, focused
 						on traditional recipes served with a modern twist.
 					</Text>
 				</View>
-				<View style={styles.subContainerImg}>
-					{/* image */}
-					<Image
-						style={styles.heroImg}
-						source={require('../assets/images/Hero image.png')}
-                        accessible
-                        accessibilityLabel='Hero image'
-     
-					/>
-				</View>
 			</View>
-            <SearchBar />
+			{/* box 3 */}
+			<View style={[styles.searchBarContainer]}>
+				<SearchBar />
+			</View>
+			<View style={styles.subContainerImg}>
+				{/* image */}
+				<Image
+					style={styles.heroImg}
+					source={require('../assets/images/Hero image.png')}
+					accessible
+					accessibilityLabel="Hero image"
+				/>
+			</View>
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1,
 		backgroundColor: '#495E57',
-		paddingLeft: 20,
-		paddingVertical: 20,
+		paddingLeft: 10,
+		paddingVertical: 5,
 		paddingRight: 10,
 	},
 	displayText: {
 		fontFamily: 'MarkaziText_500Medium',
-		fontSize: 60,
+		fontSize: 50,
 		color: '#F4CE14',
-        flex: 1
 	},
 	subTitle: {
 		fontFamily: 'MarkaziText_400Regular',
-		fontSize: 40,
+		fontSize: 30,
 		color: '#EDEFEE',
-        flex: 1
+		marginTop: -20,
 	},
 	leadText: {
 		fontFamily: 'Karla_500Medium',
@@ -75,12 +78,11 @@ const styles = StyleSheet.create({
 	},
 	innerContainer: {
 		flexDirection: 'row',
-		flex: 1,
 		gap: 5,
 	},
 	heroImg: {
 		width: 140,
-		height: 171,
+		height: 160,
 		resizeMode: 'cover',
 		borderRadius: 10,
 	},
@@ -91,6 +93,13 @@ const styles = StyleSheet.create({
 		flex: 0.4,
 		overflow: 'hidden',
 		borderRadius: 10,
+		position: 'absolute',
+		top: 60,
+		right: 4,
+	},
+	searchBarContainer: {
+		marginTop: 5,
+		flex: 0.2,
 	},
 });
 

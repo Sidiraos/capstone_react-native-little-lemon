@@ -31,8 +31,8 @@ const ProfileScreen = () => {
 
 	return (
 		<>
-			<HeaderHome btnComponent = {<BackButton noChanged = {noChanged} />}/>
-			<ScrollView keyboardDismissMode="on-drag" style={styles.container}>
+			<ScrollView  stickyHeaderIndices={[0]} keyboardDismissMode="on-drag" style={styles.container}>
+				<HeaderHome btnComponent = {<BackButton noChanged = {noChanged} />}/>
 				<HeaderHomeTitleBar headerTitle={screenName} />
 				<AvatarEdit />
 				<PersonnalInfo />
