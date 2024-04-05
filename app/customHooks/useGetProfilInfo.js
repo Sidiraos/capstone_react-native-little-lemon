@@ -12,7 +12,7 @@ export default useGetProfilInfo = () => {
             const profilInfo = await getObjectData('profilInfo');
             if(profilInfo){
                 console.log("profil info found , we update state from async storage")
-                console.log("profil info in async is" , profilInfo)
+                // console.log("profil info in async is" , profilInfo)
                 dispatch(updateStateFromAsync(profilInfo))
             }else {
                 console.log("no profil info found , we save initial state in async storage")

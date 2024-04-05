@@ -12,6 +12,7 @@ import { useRoute } from '@react-navigation/native';
 const HeaderHome = ({ btnComponent , navigation }) => {
 	const [firstName, setFirstName] = useState('');
 	const image = useSelector((state) => state.profilInfo.image);
+	// console.log("image in header home", image);
 	console.log('header home');
 	const route = useRoute();
 	const screenName = route.name;

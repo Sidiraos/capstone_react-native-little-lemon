@@ -19,14 +19,14 @@ const ProfileScreen = () => {
 
 	const route = useRoute();
 	const screenName = route.name;
-	console.log("state changed on profilescreen ")
+	// console.log("state changed on profilescreen ")
 
 	const [noChanged , setNoChanged] = useState(true);
 
 	useCheckProfilInfoState(setNoChanged);
 	useGetProfilInfo();
 	
-	console.log("no changed value is"  , noChanged)
+	// console.log("no changed value is"  , noChanged)
 	
 
 	return (

@@ -3,7 +3,6 @@ import { View, StyleSheet} from 'react-native';
 import { Karla_800ExtraBold , useFonts } from '@expo-google-fonts/karla';
 import CategoriesSectionTitle from './CategoriesSectionTitle';
 import ListOfCategories from './ListOfCategories';
-import FoodMenu from './FoodMenu';
 const CategoriesSection = () => {
     const [fontsLoaded] = useFonts({
         Karla_800ExtraBold

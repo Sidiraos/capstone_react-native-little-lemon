@@ -34,7 +34,8 @@
     "react-native-user-avatar": "^1.0.8",
     "react-native-uuid": "^2.0.2",
     "react-native-vector-icons": "^10.0.3",
-    "react-redux": "^9.1.0"
+    "react-redux": "^9.1.0",
+    "expo-sqlite": "~13.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

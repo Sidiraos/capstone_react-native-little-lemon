@@ -1,10 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
 	View,
 	StyleSheet,
-	Text,
 	ScrollView,
-	FlatList,
 	KeyboardAvoidingView,
 	Platform,
 } from 'react-native';
@@ -13,8 +11,15 @@ import HomeHeroSection from '../components/HomeHeroSection';
 import useGetProfilInfo from '../app/customHooks/useGetProfilInfo';
 import CategoriesSection from '../components/CategoriesSection';
 import FoodMenu from '../components/FoodMenu';
+import {
+	useLoadSaveDataFromDB,
+	useFilteringData,
+} from '../app/customHooks/useSQLite';
+import { clearDb } from '../database';
 const HomeScreen = ({ navigation }) => {
 	useGetProfilInfo();
+	// clearDb()
+
 	return (
 		<KeyboardAvoidingView
 			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

@@ -7,8 +7,9 @@ import {
 	Image,
 	SafeAreaView,
 	ActivityIndicator,
-    ScrollView,
-    RefreshControl
+	ScrollView,
+	RefreshControl,
+	SectionList,
 } from 'react-native';
 import {
 	Karla_700Bold,
@@ -21,12 +22,23 @@ import { useFonts } from 'expo-font';
 import { useState, useEffect } from 'react';
 import uuid from 'react-native-uuid';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
-import { fetchingMenuData } from '../app/redux/slices/foodMenuSlice';
+import { fetchingMenuData , onFulfilled , setFilteredData , getStructuredData , setSelectedCategories , filteringDataFromState } from '../app/redux/slices/foodMenuSlice';
 
-import {ErrorIcon} from '../utils/Icons';
+import { ErrorIcon } from '../utils/Icons';
 
-const Item = ({ title, description, price, category, image }) => {
-	console.log('item rendered', title, description, price, category, image);
+import { getMenuItems , createTable , saveMenuItems, filterByQueryAndCategories } from '../database';
+import { filteringData } from '../app/customHooks/useSQLite';
+import { useUpdateEffect
+ } from '../database';
+
+const Item = ({ title, description, price, image }) => {
+	const [fontsLoaded] = useFonts({
+		Karla_700Bold,
+		Karla_400Regular,
+		Karla_500Medium,
+	});
+	if (!fontsLoaded) return null;
+	// console.log('item rendered', "title :" ,title,"description :" , description,"price :", price, "image :" , image);
 	return (
 		<View style={styles.itemCard}>
 			<Text style={styles.cardTitle}>{title}</Text>
@@ -38,7 +50,9 @@ const Item = ({ title, description, price, category, image }) => {
 					<Text style={styles.highlight}>${price}</Text>
 				</View>
 				<Image
-					source={{ uri: `https://github.com/Meta-Mobile-Developer-PC/Working-With-Data-API/blob/main/images/${image}?raw=true` }}
+					source={{
+						uri: `https://github.com/Meta-Mobile-Developer-PC/Working-With-Data-API/blob/main/images/${image}?raw=true`,
+					}}
 					style={styles.image}
 				/>
 			</View>
@@ -47,43 +61,81 @@ const Item = ({ title, description, price, category, image }) => {
 };
 
 const FoodMenu = () => {
-    
-	const { data, isLoading, errMsg } = useSelector(
+	const { isLoading, errMsg, dataStructured , categoriesList , query , data , selectedCategories , dataFiltered} = useSelector(
 		(state) => state.menu,
 		shallowEqual
 	);
 	const dispatch = useDispatch();
-	// console.log(data);
-	// console.log(isLoading);
-	// console.log(errMsg);
 
-    const [refreshing, setRefreshing] = useState(false);
 
-    const [fontsLoaded] = useFonts({
-		Karla_700Bold,
-		Karla_400Regular,
-		Karla_500Medium,
-	});
-	if (!fontsLoaded) return null;
+	// console.log("selectedCategories" , selectedCategories)
+	// console.log("dataFiltered" , dataFiltered)
+	// console.log('dataStructured', dataStructured);
 
-    const onRefresh = () => {
-        setRefreshing(true);
-        dispatch(
-            fetchingMenuData(
-                'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/capstone.json'
-            )
-        );
-        setRefreshing(false);
-    }
-
+	const dataToDisplay = [];
 	useEffect(() => {
-		console.log('use effect in food menu component');
+		dataFiltered.forEach((categoryObj) => {
+			categoryObj.data.forEach((item) => {
+				dataToDisplay.push(item);
+			});
+		});
+		
+	}  , [dataFiltered]);
+
+
+	useEffect(()=>{
+		// console.log("use effect in food menu")
+		const fetchingFoodMenu = async ()=>{
+			await createTable()
+			const menuItems = await getMenuItems()
+			console.log("menu items in database on loading"  , menuItems)
+			if(!menuItems.length){
+				dispatch(fetchingMenuData('https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/capstone.json'))
+			} else {
+				dispatch(onFulfilled(menuItems))
+			}
+		}
+
+		fetchingFoodMenu();
+
+	} , [])
+
+	
+	useEffect(()=>{
+		const categories = categoriesList.filter((item) => item.selected === true).map((item) => item.title);
+		(async()=> 
+		{
+			await createTable()
+			const menuItems = await getMenuItems()
+			if(!menuItems.length){
+				dispatch(filteringDataFromState(categories))
+				
+			} else {
+				await filterByQueryAndCategories(query , selectedCategories)
+			}
+
+		})()
+		// console.log("category list is changed so this useEffect is called")
+		// console.log("categories" , categories)
+		
+		
+	} , [categoriesList])
+
+
+	
+
+
+	const [refreshing, setRefreshing] = useState(false);
+
+	const onRefresh = () => {
+		setRefreshing(true);
 		dispatch(
 			fetchingMenuData(
 				'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/capstone.json'
 			)
 		);
-	}, []);
+		setRefreshing(false);
+	};
 
 	return (
 		<View style={styles.container}>
@@ -91,16 +143,14 @@ const FoodMenu = () => {
 				<ActivityIndicator size={'large'} color={'#F4CE14'} />
 			) : errMsg ? (
 				<Text>{errMsg}</Text>
-			) : (
-                data ? (
-                    <FlatList
-					data={data}
+			) : dataToDisplay ? (
+				<FlatList
+					data={dataToDisplay}
 					renderItem={({ item }) => (
 						<Item
 							title={item.name}
 							description={item.description}
 							price={item.price}
-							category={item.category}
 							image={item.image}
 						/>
 					)}
@@ -109,16 +159,35 @@ const FoodMenu = () => {
 					ItemSeparatorComponent={() => (
 						<View style={styles.itemSeparatorStyle} />
 					)}
-
-                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+					refreshControl={
+						<RefreshControl
+							refreshing={refreshing}
+							onRefresh={onRefresh}
+						/>
+					}
 				/>
-                ) : (
-                    <ScrollView style={[styles.container]} contentContainerStyle={{justifyContent : 'center', alignItems : 'center'}} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-                        <Text style={styles.textParagraph}>Something went wrong</Text>
-                        <ErrorIcon />
-                        <Text style={styles.textParagraph}>Slidedown to refresh</Text>
-                    </ScrollView>
-                )
+			) : (
+				<ScrollView
+					style={[styles.container]}
+					contentContainerStyle={{
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+					refreshControl={
+						<RefreshControl
+							refreshing={refreshing}
+							onRefresh={onRefresh}
+						/>
+					}
+				>
+					<Text style={styles.textParagraph}>
+						Something went wrong
+					</Text>
+					<ErrorIcon />
+					<Text style={styles.textParagraph}>
+						Slidedown to refresh
+					</Text>
+				</ScrollView>
 			)}
 		</View>
 	);

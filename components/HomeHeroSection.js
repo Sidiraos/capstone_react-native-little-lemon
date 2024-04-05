@@ -12,6 +12,7 @@ import { useFonts } from 'expo-font';
 import SearchBar from './SearchBar';
 
 const HomeHeroSection = () => {
+
 	const [fontsLoaded] = useFonts({
 		MarkaziText_500Medium,
 		MarkaziText_400Regular,
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
 	leadText: {
 		fontFamily: 'Karla_500Medium',
 		fontSize: 16,
-		color: '#000',
+		color: '#fff',
 	},
 	innerContainer: {
 		flexDirection: 'row',

@@ -6,7 +6,7 @@ import { TextInput } from 'react-native-paper';
 
 const PersonnalInfo = () => {
 	const [loginInfo, setLoginInfo] = useState('');
-	console.log("personnal info")
+	console.log("personnal info component")
 	useEffect(() => {
 		const fetchLoginInfo = async () => {
 			const loginInfo = await getLoginInfo();
@@ -17,7 +17,7 @@ const PersonnalInfo = () => {
 		};
 		fetchLoginInfo();
 	}, []);
-	console.log('info profilForm are', loginInfo);
+	// console.log('info profilForm are', loginInfo);
 	return (
 		<View style={styles.container}>
 			<TextInput
