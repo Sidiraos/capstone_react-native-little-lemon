@@ -21,7 +21,7 @@ export async function createTable() {
 
 export async function getMenuItems() {
   console.log("fetching items in Sqlite DB")
-  return new Promise((resolve) => {
+  return new Promise((resolve , reject) => {
     db.transaction((tx) => {
       tx.executeSql('select * from menu', [], (_, { rows }) => {
         const menuItems = rows._array
@@ -48,8 +48,6 @@ export async function saveMenuItems(menuItems) {
 
 export async function filterByQueryAndCategories(query, activeCategories) {
   return new Promise((resolve , reject) => {
-    console.log("query :" ,query)
-    console.log("active categories",activeCategories)
     if (!query) {
        db.transaction(tx => {
          tx.executeSql(`select * from menu where category in (${activeCategories.map(c => '?').join(', ')})`, [...activeCategories], (_, { rows }) => {

@@ -5,11 +5,9 @@ import {
 	FlatList,
 	Text,
 	Image,
-	SafeAreaView,
 	ActivityIndicator,
 	ScrollView,
 	RefreshControl,
-	SectionList,
 } from 'react-native';
 import {
 	Karla_700Bold,
@@ -20,14 +18,12 @@ import {
 import { useFonts } from 'expo-font';
 
 import { useState, useEffect } from 'react';
-import uuid from 'react-native-uuid';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { fetchingMenuData , onFulfilled , setFilteredData , getStructuredData , setSelectedCategories , filteringDataFromState } from '../app/redux/slices/foodMenuSlice';
 
 import { ErrorIcon } from '../utils/Icons';
 
-import { getMenuItems , createTable , saveMenuItems, filterByQueryAndCategories } from '../database';
-import { filteringData } from '../app/customHooks/useSQLite';
+import { getMenuItems , createTable, filterByQueryAndCategories } from '../database';
 import { useUpdateEffect
  } from '../database';
 
@@ -38,7 +34,6 @@ const Item = ({ title, description, price, image }) => {
 		Karla_500Medium,
 	});
 	if (!fontsLoaded) return null;
-	// console.log('item rendered', "title :" ,title,"description :" , description,"price :", price, "image :" , image);
 	return (
 		<View style={styles.itemCard}>
 			<Text style={styles.cardTitle}>{title}</Text>
@@ -61,16 +56,12 @@ const Item = ({ title, description, price, image }) => {
 };
 
 const FoodMenu = () => {
-	const { isLoading, errMsg, dataStructured , categoriesList , query , data , selectedCategories , dataFiltered} = useSelector(
+	const { isLoading, errMsg , categoriesList , selectedCategories , dataFiltered} = useSelector(
 		(state) => state.menu,
 		shallowEqual
 	);
+	const {query} = useSelector((state) => state.query, shallowEqual);
 	const dispatch = useDispatch();
-
-
-	// console.log("selectedCategories" , selectedCategories)
-	// console.log("dataFiltered" , dataFiltered)
-	// console.log('dataStructured', dataStructured);
 
 	const dataToDisplay = [];
 	useEffect(() => {
@@ -84,7 +75,6 @@ const FoodMenu = () => {
 
 
 	useEffect(()=>{
-		// console.log("use effect in food menu")
 		const fetchingFoodMenu = async ()=>{
 			await createTable()
 			const menuItems = await getMenuItems()
@@ -93,6 +83,7 @@ const FoodMenu = () => {
 				dispatch(fetchingMenuData('https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/capstone.json'))
 			} else {
 				dispatch(onFulfilled(menuItems))
+				dispatch(getStructuredData(menuItems));
 			}
 		}
 
@@ -101,7 +92,7 @@ const FoodMenu = () => {
 	} , [])
 
 	
-	useEffect(()=>{
+	useUpdateEffect(()=>{
 		const categories = categoriesList.filter((item) => item.selected === true).map((item) => item.title);
 		(async()=> 
 		{
@@ -111,19 +102,13 @@ const FoodMenu = () => {
 				dispatch(filteringDataFromState(categories))
 				
 			} else {
-				await filterByQueryAndCategories(query , selectedCategories)
+				const newData = await filterByQueryAndCategories(query , selectedCategories)
+				dispatch(setFilteredData(newData))
 			}
 
-		})()
-		// console.log("category list is changed so this useEffect is called")
-		// console.log("categories" , categories)
-		
+		})()		
 		
 	} , [categoriesList])
-
-
-	
-
 
 	const [refreshing, setRefreshing] = useState(false);
 

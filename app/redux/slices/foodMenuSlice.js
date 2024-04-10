@@ -9,7 +9,6 @@ const initialState = {
 	error: null,
 	dataStructured: [],
 	categoriesList: [],
-	query: '',
 	selectedCategories: [],
 	dataFiltered: [],
 };
@@ -52,9 +51,6 @@ const foodMenuSlice = createSlice({
 			state.dataStructured = getSectionListData(action.payload);
             state.dataFiltered = state.dataStructured
 		},
-		setQuery(state, action) {
-			state.query = action.payload;
-		},
 		setFilteredData(state) {
             state.dataFiltered = state.dataStructured.filter(item => {
                 return state.selectedCategories.some(category => category === item.title)})
@@ -75,7 +71,7 @@ export const fetchingMenuData = (url) => {
 			});
 			dispatch(onFulfilled(newData)); // Retourner uniquement le menu
 			dispatch(getStructuredData(newData));
-			saveMenuItems(newData);
+			await saveMenuItems(newData);
 		} catch (error) {
 			console.error('Error fetching data:', error);
 			dispatch(onRejected(error.message)); // Lancer une erreur en cas d'échec de la requête
@@ -102,7 +98,6 @@ export const {
 	onFulfilled,
 	toggle,
 	getStructuredData,
-	setQuery,
 	setFilteredData,
 	setSelectedCategories,
 } = foodMenuSlice.actions;

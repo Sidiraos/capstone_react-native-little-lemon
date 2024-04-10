@@ -5,10 +5,9 @@ import { useCallback, useMemo } from 'react';
 import debounce from 'lodash.debounce';
 import { useFilteringData } from '../app/customHooks/useSQLite';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
-import { setQuery } from '../app/redux/slices/foodMenuSlice';
-
+import { setQuery } from '../app/redux/slices/querySlice';
 const SearchBar = () => {
-	const query = useSelector((state) => state.menu.query, shallowEqual);
+	const query = useSelector((state) => state.query.query, shallowEqual);
 	console.log('query in search bar :', query);
 
 	const dispatch = useDispatch();
@@ -16,10 +15,11 @@ const SearchBar = () => {
 		dispatch(setQuery(text));
 	}, []);
 
-	const debouncedLookup = useMemo(() => debounce(lookup, 500), [lookup]);
+	// const debouncedLookup = useMemo(() => debounce(lookup, 100), [lookup]);
 
 	const handleSearchChange = (text) => {
-		debouncedLookup(text);
+		// debouncedLookup(text);
+		lookup(text);
 	};
 
 	return (
