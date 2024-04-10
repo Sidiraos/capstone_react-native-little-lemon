@@ -43,6 +43,8 @@ const DATA_SAMPLE = [
 	},
 ];
 
+
+
  function getSectionListData(data) {
 	// console.log('data before structured', data);
 	const transformedData = {};

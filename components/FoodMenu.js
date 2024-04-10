@@ -63,6 +63,8 @@ const FoodMenu = () => {
 	const {query} = useSelector((state) => state.query, shallowEqual);
 	const dispatch = useDispatch();
 
+	console.dir("dataFiltered" , dataFiltered)
+
 	const dataToDisplay = [];
 	useEffect(() => {
 		dataFiltered.forEach((categoryObj) => {
@@ -99,16 +101,17 @@ const FoodMenu = () => {
 			await createTable()
 			const menuItems = await getMenuItems()
 			if(!menuItems.length){
-				dispatch(filteringDataFromState(categories))
+				dispatch(filteringDataFromState(categories , query))
 				
 			} else {
 				const newData = await filterByQueryAndCategories(query , selectedCategories)
-				dispatch(setFilteredData(newData))
+				dispatch(setFilteredData({newdata : newData}))
 			}
 
 		})()		
 		
-	} , [categoriesList])
+	} , [categoriesList , query])
+
 
 	const [refreshing, setRefreshing] = useState(false);
 

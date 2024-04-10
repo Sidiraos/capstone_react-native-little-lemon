@@ -2,6 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 import uuid from 'react-native-uuid';
 import getSectionListData from '../../../utils/structuredData';
 import { saveMenuItems } from '../../../database';
+import filterDataByQuery from '../../../utils/queryFilteredData';
+import destructuredData from '../../../utils/destructureData';
 
 const initialState = {
 	data: [],
@@ -51,9 +53,23 @@ const foodMenuSlice = createSlice({
 			state.dataStructured = getSectionListData(action.payload);
             state.dataFiltered = state.dataStructured
 		},
-		setFilteredData(state) {
-            state.dataFiltered = state.dataStructured.filter(item => {
-                return state.selectedCategories.some(category => category === item.title)})
+		setFilteredData(state , action) {
+			if(!action.payload.newData){
+				if(!action.payload.query){
+					state.dataFiltered = state.dataStructured.filter(item => {
+						return state.selectedCategories.some(category => category === item.title)})
+				} else {
+					state.dataFiltered = state.dataStructured.filter(item => {
+						return state.selectedCategories.some(category => category === item.title)})
+					const destructured = destructuredData(state.dataFiltered)
+					// console.log("destructured" , destructured)
+					const filteredByQuery = filterDataByQuery(destructured , action.payload.query)
+					// console.log("filteredByQuery" , filteredByQuery)
+					state.dataFiltered = getSectionListData(filteredByQuery)
+				}
+			}
+			else {state.dataFiltered = action.newData}
+
 		},
 		setSelectedCategories(state, action) {
 			state.selectedCategories = action.payload;
@@ -73,22 +89,22 @@ export const fetchingMenuData = (url) => {
 			dispatch(getStructuredData(newData));
 			await saveMenuItems(newData);
 		} catch (error) {
-			console.error('Error fetching data:', error);
+			console.error('Error fetching data on fetchingMenuData:', error);
 			dispatch(onRejected(error.message)); // Lancer une erreur en cas d'échec de la requête
 		}
 	};
 };
 
-export const filteringDataFromState =  (categories) => {
+export const filteringDataFromState =  (categories , query) => {
     return (dispatch , getState)=>{
         state = getState().menu
         if(categories.length){
 			dispatch(setSelectedCategories(categories))
-			dispatch(setFilteredData())
+			dispatch(setFilteredData({query : query}))
 
 		}else {
 			dispatch(setSelectedCategories(state.categoriesList.map((item) => item.title)))
-			dispatch(setFilteredData())
+			dispatch(setFilteredData({query : query}))
 		}
     }
 }
