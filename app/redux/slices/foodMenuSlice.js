@@ -68,7 +68,7 @@ const foodMenuSlice = createSlice({
 					state.dataFiltered = getSectionListData(filteredByQuery)
 				}
 			}
-			else {state.dataFiltered = action.newData}
+			else {state.dataFiltered = getSectionListData(action.payload.newData)}
 
 		},
 		setSelectedCategories(state, action) {
