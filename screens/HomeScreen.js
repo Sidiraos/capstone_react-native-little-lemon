@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
 	View,
 	StyleSheet,
@@ -11,11 +11,7 @@ import HomeHeroSection from '../components/HomeHeroSection';
 import useGetProfilInfo from '../app/customHooks/useGetProfilInfo';
 import CategoriesSection from '../components/CategoriesSection';
 import FoodMenu from '../components/FoodMenu';
-import {
-	useLoadSaveDataFromDB,
-	useFilteringData,
-} from '../app/customHooks/useSQLite';
-import { clearDb } from '../database';
+
 const HomeScreen = ({ navigation }) => {
 	useGetProfilInfo();
 	// clearDb()

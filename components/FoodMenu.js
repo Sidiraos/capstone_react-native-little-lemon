@@ -62,16 +62,20 @@ const FoodMenu = () => {
 	);
 	const {query} = useSelector((state) => state.query, shallowEqual);
 	const dispatch = useDispatch();
+	const [dataToDisplay , setDataToDisplay] = useState([]);
 
 	console.dir("dataFiltered" , dataFiltered)
 
-	const dataToDisplay = [];
+
 	useEffect(() => {
+		const display = []
 		dataFiltered.forEach((categoryObj) => {
 			categoryObj.data.forEach((item) => {
-				dataToDisplay.push(item);
+				display.push(item);
 			});
 		});
+
+		setDataToDisplay(display);
 		
 	}  , [dataFiltered]);
 
