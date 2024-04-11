@@ -19,7 +19,7 @@ import { useFonts } from 'expo-font';
 
 import { useState, useEffect } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
-import { fetchingMenuData , onFulfilled , setFilteredData , getStructuredData , setSelectedCategories , filteringDataFromState } from '../app/redux/slices/foodMenuSlice';
+import { fetchingMenuData , onFulfilled , setFilteredData , getStructuredData  , filteringDataFromState } from '../app/redux/slices/foodMenuSlice';
 
 import { ErrorIcon } from '../utils/Icons';
 
@@ -28,6 +28,23 @@ import { useUpdateEffect
  } from '../database';
 
 const Item = ({ title, description, price, image }) => {
+	const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+
+  const onLoadStart = () => {
+    setLoading(true);
+    setError(false);
+  };
+
+  const onLoadEnd = () => {
+    setLoading(false);
+  };
+
+  const onError = () => {
+    setLoading(false);
+    setError(true);
+  };
 	const [fontsLoaded] = useFonts({
 		Karla_700Bold,
 		Karla_400Regular,
@@ -44,12 +61,25 @@ const Item = ({ title, description, price, image }) => {
 					</Text>
 					<Text style={styles.highlight}>${price}</Text>
 				</View>
-				<Image
+				{/* <Image
 					source={{
 						uri: `https://github.com/Meta-Mobile-Developer-PC/Working-With-Data-API/blob/main/images/${image}?raw=true`,
 					}}
 					style={styles.image}
-				/>
+				/> */}
+
+{loading && <ActivityIndicator style={styles.loader} size="large" color="#0000ff" />}
+      {error ? (
+        <Text style={styles.errorText}>Failed to load image</Text>
+      ) : (
+        <Image
+          source={{ uri: `https://github.com/Meta-Mobile-Developer-PC/Working-With-Data-API/blob/main/images/${image}?raw=true`,}}
+          style={styles.image}
+          onLoadStart={onLoadStart}
+          onLoadEnd={onLoadEnd}
+          onError={onError}
+        />
+      )}
 			</View>
 		</View>
 	);
@@ -63,6 +93,8 @@ const FoodMenu = () => {
 	const {query} = useSelector((state) => state.query, shallowEqual);
 	const dispatch = useDispatch();
 	const [dataToDisplay , setDataToDisplay] = useState([]);
+
+	
 
 	console.dir("dataFiltered" , dataFiltered)
 
@@ -231,6 +263,17 @@ const styles = StyleSheet.create({
 		width: '100%',
 		marginVertical: 20,
 	},
+	loader: {
+		position: 'absolute',
+		right: 30,
+	  },
+	  errorText: {
+		fontSize: 16,
+		color: 'red',
+		fontFamily: 'Karla_400Regular',
+		textAlign: 'center',
+		flex : 0.4
+	  },
 });
 
 export default FoodMenu;

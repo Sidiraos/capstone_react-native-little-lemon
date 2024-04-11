@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
 		overflow: 'hidden',
 		borderRadius: 10,
 		position: 'absolute',
-		top: 60,
+		top: 25,
 		right: 4,
 	},
 	searchBarContainer: {

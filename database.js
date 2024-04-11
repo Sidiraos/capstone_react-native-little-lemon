@@ -1,5 +1,5 @@
 import * as SQLite from 'expo-sqlite';
-import { reject } from 'lodash';
+
 import { useEffect , useRef } from 'react';
 
 const db = SQLite.openDatabase('little_lemon');
